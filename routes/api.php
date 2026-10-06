@@ -6,29 +6,16 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\BukuController;
 
-// ==========================================
-// PUBLIC ROUTES (Bisa diakses tanpa login)
-// ==========================================
+// Public Routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-// ==========================================
-// PROTECTED ROUTES (Harus login untuk akses)
-// ==========================================
+// Protected Routes
 Route::middleware('auth:sanctum')->group(function () {
-    
-    // Auth Routes
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/profile', function (Request $request) {
-        return response()->json([
-            'status' => 'success',
-            'data' => $request->user()
-        ]);
+        return response()->json(['status' => 'success', 'data' => $request->user()]);
     });
-
-    // Product Routes (Terlindungi)
     Route::apiResource('products', ProductController::class);
-    
-    // Buku Routes (Terlindungi)
     Route::apiResource('books', BukuController::class);
 });
